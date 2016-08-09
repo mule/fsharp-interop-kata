@@ -34,7 +34,8 @@ module Win32 =
     let getWindowBounds windowHandle =
         let mutable rect : RECT = Unchecked.defaultof<_>
         let result = GetWindowRect(windowHandle, &rect)
-        rect
+        let bounds = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top)
+        bounds
 
     let enumTopWindows() =
         let mutable windows = []
@@ -44,12 +45,12 @@ module Win32 =
         let enumResult = EnumWindows(callback, IntPtr.Zero)
         windows
 
-    let windowToString (title: string,  bounds: RECT) : string =
-        let windowStr = sprintf " tittle: %s left: %d top: %d right %d bottom: %d" title bounds.left bounds.top bounds.right bounds.bottom
+    let windowToString (title: string,  bounds: Rectangle) : string =
+        let windowStr = sprintf " tittle: %s width: %d height: %d X: %d Y: %d" title bounds.Width bounds.Height bounds.X bounds.Y
         windowStr
-        
-        
-        
+
+
+            
 module Test = 
     printfn "%A" (Win32.enumTopWindows())
 
